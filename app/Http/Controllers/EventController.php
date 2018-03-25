@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Event;
+use Calendar;
 use Illuminate\Http\Request;
-use Calender;
+
 use Session;
 
 class EventController extends Controller
@@ -17,7 +18,24 @@ class EventController extends Controller
     public function index()
     {
         //
-        return view('admin.event.index');
+        $events = [];
+        $event_data = Event::all();
+        if ($event_data ->count()){
+            foreach ($event_data  as $key => $event){
+               $events[] = Calendar::event(
+                   $event->title,
+                   true,
+                   new \DateTime($event->start_date),
+                   new \DateTime($event->finish_date.' +1 day')
+               );
+            }
+        }
+
+        $calendar_events = Calendar::addEvents($events);
+
+        return view('admin.event.index', compact('calendar_events'));
+
+
     }
 
     /**
@@ -29,7 +47,10 @@ class EventController extends Controller
     {
         //
 
-        return view('admin.event.create');
+
+        $calendar_events = [];
+
+        return view('admin.event.create', compact('calendar_events'));
     }
 
     /**
