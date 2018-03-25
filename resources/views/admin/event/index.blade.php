@@ -4,8 +4,8 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Display All Events</div>
+                <div class="card ">
+                    <div class="card-header bg-primary">Display All Events</div>
                     <div class="container">
                         <div class="row">
                             <div class="col-md-10 col-sm-10 col-offset-2">
@@ -27,7 +27,6 @@
                                         <td><a href="#" class="btn btn-primary">Edit</a></td>
                                         <td><a href="#" class="btn btn-danger">Delete</a></td>
                                     </tr>
-
 
                                     </tbody>
                                 </table>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Event;
 use Illuminate\Http\Request;
+use Calender;
+use Session;
 
 class EventController extends Controller
 {
@@ -39,6 +41,28 @@ class EventController extends Controller
     public function store(Request $request)
     {
         //
+//        dd($request->all());
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'start_date' => 'required',
+            'finish_date' => 'required',
+        ]);
+
+//        if ($validatedData->fails()){
+//
+//            Session::flash('warning', 'Please Enter the valid details');
+//            return Redirect::to('admin.event.create')->withInput()->withErrors($validatedData);
+//        }
+
+        $event = new Event;
+        $event->title = $request->title;
+        $event->start_date = $request->start_date;
+        $event->finish_date = $request->finish_date;
+
+        $event->save();
+
+        Session::flash('success', 'Event added successfully');
+        return back();
     }
 
     /**

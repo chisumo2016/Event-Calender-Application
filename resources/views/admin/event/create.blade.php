@@ -5,17 +5,19 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Dashboard</div>
+                    <div class="card-header bg-primary">Dashboard</div>
                     <div class="container">
                         <div class="row">
                             <div class="col-md-12">
-                                <form>
+                                <form action="{{url('admin/events  ')}}" method="post" enctype="multipart/form-data">
+                                    {{ csrf_field() }}
+
                                     <fieldset>
-                                        <legend>Legend</legend>
+
                                         <div class="form-group">
                                             <label for="title" class="col-sm-2 col-form-label">Title:</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="title" value="email@example.com" name="title">
+                                                <input type="text" class="form-control" id="title" value="" name="title" placeholder="Enter Title">
                                             </div>
                                         </div>
 
@@ -35,6 +37,7 @@
 
                                         </fieldset>
                                         <button type="submit" class="btn btn-primary">Add Event</button>
+
                                     </fieldset>
                                 </form>
                             </div>
