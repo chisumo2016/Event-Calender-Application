@@ -11,22 +11,25 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+
+    <link rel="stylesheet" href="{{asset('css/calendar-css/fullcalendar.min.css')}}">
+
+
+
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css">
-
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/3.9.0/moment.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="{{asset('js/calendar-js/jquery.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('js/calendar-js/moment.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('js/calendar-js/fullcalendar.min.js')}}"></script>
 
 
 
 
-    <!-- Styles -->
+
+   <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
@@ -43,6 +46,11 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
+
+                        <li><a href="{{ url('/') }}">Home</a></li>
+                        @if (!Auth::guest())
+                            <li><a href="{{ route('events.create') }}">New Event</a></li>
+                        @endif
 
                     </ul>
 
@@ -78,10 +86,13 @@
 
         <main class="py-4">
             @yield('content')
+            <div class='col-lg-4 col-lg-offset-4'>
+            <h1><center>401<br>
+            ACCESS DENIED</center></h1>
+            </div>
         </main>
     </div>
 
-    {!! $calendar_events->calendar() !!}
-    {!! $calendar_events->script() !!}
+
 </body>
 </html>

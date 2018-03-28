@@ -5,11 +5,19 @@ namespace App\Http\Controllers;
 use App\Event;
 use Calendar;
 use Illuminate\Http\Request;
-
+use Carbon\Carbon;
 use Session;
 
 class EventController extends Controller
 {
+
+    public function __construct() 
+    {
+        $this->middleware(['auth', 'clearance'])->except('index', 'show');
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -17,23 +25,24 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
-        $events = [];
         $event_data = Event::all();
-        if ($event_data ->count()){
-            foreach ($event_data  as $key => $event){
-               $events[] = Calendar::event(
-                   $event->title,
-                   true,
-                   new \DateTime($event->start_date),
-                   new \DateTime($event->finish_date.' +1 day')
-               );
+
+        if ($event_data ->count())
+        {
+            foreach ($event_data  as $key => $event)
+            {
+                $events[] = Calendar::event(
+                    $event->title,
+                    true,
+                    new \DateTime($event->start_date),
+                    new \DateTime($event->finish_date.' +1 day')
+                );
             }
         }
 
         $calendar_events = Calendar::addEvents($events);
 
-        return view('admin.event.index', compact('calendar_events'));
+        return view('admin.event.index', compact('calendar_events','event_data'));
 
 
     }
@@ -45,10 +54,22 @@ class EventController extends Controller
      */
     public function create()
     {
-        //
+        $event_data = Event::all();
 
+        if ($event_data ->count())
+        {
+            foreach ($event_data  as $key => $event)
+            {
+                $events[] = Calendar::event(
+                    $event->title,
+                    true,
+                    new \DateTime($event->start_date),
+                    new \DateTime($event->finish_date.' +1 day')
+                );
+            }
+        }
 
-        $calendar_events = [];
+        $calendar_events = Calendar::addEvents($events);
 
         return view('admin.event.create', compact('calendar_events'));
     }
@@ -63,11 +84,11 @@ class EventController extends Controller
     {
         //
 //        dd($request->all());
-        $validatedData = $request->validate([
-            'title' => 'required|max:255',
-            'start_date' => 'required',
-            'finish_date' => 'required',
-        ]);
+        // $validatedData = $request->validate([
+        //     'title' => 'required|max:255',
+        //     'start_date' => 'required',
+        //     'finish_date' => 'required',
+        // ]);
 
 //        if ($validatedData->fails()){
 //
@@ -103,9 +124,11 @@ class EventController extends Controller
      * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function edit(Event $event)
+    public function edit($id)
     {
-        //
+        $event = Event::find($id);
+
+        return view('admin.event.edit', compact('event'));
     }
 
     /**
@@ -115,19 +138,28 @@ class EventController extends Controller
      * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Event $event)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        $requestData = $request->all();
 
+        $event = Event::find($id);
+        $event->update($requestData);
+
+        return redirect()->route('events.index')->with('success','Event updated successfully');
+    }
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Event $event)
+    public function destroy(Request $request, $id)
     {
         //
+
+        $deleteEvent = Event::find($id);
+
+        return redirect()->route('events.index')->with('success','Event deleted Successfully');
+
     }
 }
