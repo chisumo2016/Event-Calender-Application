@@ -1,13 +1,12 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Session;
+
 
 class PermissionController extends Controller
 {
@@ -52,7 +51,6 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $this->validate($request, [
             'name'=>'required|max:40',
         ]);
@@ -65,7 +63,7 @@ class PermissionController extends Controller
 
         $permission->save();
 
-        if (!empty($request['roles'])) { //If one or more role
+        if (!empty($request['roles'])) { 
             foreach ($roles as $role) {
                 $r = Role::where('id', '=', $role)->firstOrFail();
                 $permission = Permission::where('name', '=', $name)->first();
@@ -77,8 +75,6 @@ class PermissionController extends Controller
             ->with('flash_message',
              'Permission'. $permission->name.' added!');
     }
-    }
-
     /**
      * Display the specified resource.
      *
@@ -89,6 +85,7 @@ class PermissionController extends Controller
     {
         //
         return redirect('permissions');
+       
     }
 
     /**
@@ -102,8 +99,8 @@ class PermissionController extends Controller
         //
         $permission = Permission::findOrFail($id);
         return view('permissions.edit', compact('permission'));
+        
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -124,6 +121,7 @@ class PermissionController extends Controller
         return redirect()->route('permissions.index')
             ->with('flash_message',
              'Permission'. $permission->name.' updated!');
+        
     }
 
     /**
@@ -134,8 +132,7 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        //
-        permission = Permission::findOrFail($id);
+        $permission = Permission::findOrFail($id);
 
         if ($permission->name == "Administer roles & permissions") {
             return redirect()->route('permissions.index')
@@ -148,5 +145,6 @@ class PermissionController extends Controller
         return redirect()->route('permissions.index')
             ->with('flash_message',
              'Permission deleted!');
+    }
     }
 }

@@ -1,12 +1,17 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
+use Auth;
+
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Session;
+
 
 class UserController extends Controller
 {
-
     public function __construct() 
     {
         $this->middleware(['auth', 'isAdmin']); //middleware 
@@ -21,8 +26,10 @@ class UserController extends Controller
     public function index()
     {
         //
+
         $users = User::all(); 
         return view('users.index')->with('users', $users);
+        
     }
 
     /**
@@ -46,7 +53,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $this->validate($request, [
             'name'=>'required|max:120',
             'email'=>'required|email|unique:users',
@@ -65,8 +71,7 @@ class UserController extends Controller
         }        
         //Redirect to the users.index view and display message
         return redirect()->route('users.index')
-            ->with('flash_message',
-             'User successfully added.');
+            ->with('flash_message','User successfully added.');
     }
 
     /**
@@ -78,7 +83,8 @@ class UserController extends Controller
     public function show($id)
     {
         //
-        eturn redirect('users'); 
+        return redirect('users'); 
+       
     }
 
     /**
@@ -90,9 +96,10 @@ class UserController extends Controller
     public function edit($id)
     {
         //
-        user = User::findOrFail($id);
-        $roles = Role::get(); //Get all roles
-        return view('users.edit', compact('user', 'roles')); //pass user and roles data to view
+        $user = User::findOrFail($id);
+        $roles = Role::get(); 
+        return view('users.edit', compact('user', 'roles')); 
+        
     }
 
     /**
@@ -123,8 +130,8 @@ class UserController extends Controller
             $user->roles()->detach();
         }
         return redirect()->route('users.index')
-            ->with('flash_message',
-             'User successfully edited.');
+            ->with('flash_message','User successfully edited.');
+       
     }
 
     /**
@@ -140,7 +147,7 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('users.index')
-            ->with('flash_message',
-             'User successfully deleted.');
+            ->with('flash_message','User successfully deleted.');
+        
     }
 }
