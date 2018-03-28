@@ -138,7 +138,7 @@ class RoleController extends Controller
             ->with('flash_message',
              'Role'. $role->name.' updated!');
     }
-    }
+    
 
     /**
      * Remove the specified resource from storage.

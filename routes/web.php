@@ -18,9 +18,10 @@ Route::get('/', function () {
 Auth::routes();
 
 
-//Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/', 'EventController@index')->name('home');
+
+
 
 // Users resource route.
 Route::resource('users', 'UserController');
@@ -33,3 +34,5 @@ Route::resource('permissions', 'PermissionController');
 
 
 Route::Resource('/admin/events', 'EventController');
+
+Route::get('/home', 'EventController@pageHome')->name('home');

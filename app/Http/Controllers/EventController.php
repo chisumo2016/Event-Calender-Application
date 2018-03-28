@@ -23,6 +23,31 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     public function pageHome()
+     {
+        $event_data = Event::all();
+
+        if ($event_data ->count())
+        {
+            foreach ($event_data  as $key => $event)
+            {
+                $events[] = Calendar::event(
+                    $event->title,
+                    true,
+                    new \DateTime($event->start_date),
+                    new \DateTime($event->finish_date.' +1 day')
+                );
+            }
+        }
+
+        $calendar_events = Calendar::addEvents($events);
+
+        return view('home', compact('calendar_events','event_data'));
+
+
+     }
+
     public function index()
     {
         $event_data = Event::all();
